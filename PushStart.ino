@@ -13,13 +13,12 @@
 
 #define BUTTON_PRESS_THRESHOLD 500
 
-#define pinCap A4
-
 #define pinACC 2
 #define pinIG1 4
 #define pinIG2 7
 #define pinST2 8
 
+#define pinCap A4
 #define pinLed 10
 
 // Slow down the automatic calibration cooldown
@@ -42,14 +41,14 @@ unsigned long fadeStart = 0;
 void setup() {
 
   // Bring relay pins low as soon as possible
-  pinMode(pinACC, OUTPUT);
   digitalWrite(pinACC, LOW);
-  pinMode(pinIG1, OUTPUT);
   digitalWrite(pinIG1, LOW);
-  pinMode(pinIG2, OUTPUT);
   digitalWrite(pinIG2, LOW);
-  pinMode(pinST2, OUTPUT);
   digitalWrite(pinST2, LOW);
+  pinMode(pinACC, OUTPUT);
+  pinMode(pinIG1, OUTPUT);
+  pinMode(pinIG2, OUTPUT);
+  pinMode(pinST2, OUTPUT);
 
   Serial.begin(115200);
 
@@ -67,6 +66,7 @@ void setup() {
 }
 
 void OFF() {
+  mode = 0;
   digitalWrite(pinACC, LOW);  // 2-3
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
@@ -76,6 +76,7 @@ void OFF() {
 }
 
 void ACC() {
+  mode = 1;
   digitalWrite(pinACC, HIGH); // 2-3
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
@@ -86,6 +87,7 @@ void ACC() {
 }
 
 void ON() {
+  mode = 2;
   digitalWrite(pinACC, HIGH); // 2-3
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
@@ -95,6 +97,7 @@ void ON() {
 }
 
 void ST() {
+  mode = 3;
   digitalWrite(pinACC, LOW);  // 2-3
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
@@ -102,6 +105,18 @@ void ST() {
   ledShift = 127; ledAmp = 128;
   ledPeriod = 250; fadeStart = millis();
   Serial.println("Mode: engine start"); Serial.flush();
+}
+
+void cycle() {
+  mode += 1;
+  switch (mode) {
+    case 3:
+      OFF(); break;
+    case 1:
+      ACC(); break;
+    case 2:
+      ON(); break;
+  }
 }
 
 void loop() {
@@ -118,33 +133,18 @@ void loop() {
   bool touched = (value - (ref >> offset)) > 40;
 
   if (touched & !pressed) {
-
     touchStart = millis();
-
   } else if (!touched & pressed) {
-
     if (mode == 3) {
-      mode = 2;
+      ON();
     } else if (millis() - touchStart < BUTTON_PRESS_THRESHOLD) {
-      mode += 1;
+      cycle();
     }
-
-    switch (mode) {
-      case 3:
-        mode = 0;
-      case 0:
-        OFF(); break;
-      case 1:
-        ACC(); break;
-      case 2:
-        ON(); break;
-    }
-
   }
 
   pressed = touched;
 
-  if (touched & millis() - touchStart > BUTTON_PRESS_THRESHOLD & mode != 3) {
+  if (pressed & millis() - touchStart > BUTTON_PRESS_THRESHOLD & mode != 3) {
     mode = 3;
     ST();
   }
