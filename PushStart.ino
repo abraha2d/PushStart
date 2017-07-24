@@ -20,6 +20,8 @@
 #define pinIG2 7
 #define pinST2 8
 
+#define pinLed 10
+
 // Slow down the automatic calibration cooldown
 #define offset 2 // <= 6
 
@@ -31,6 +33,11 @@ byte mode = 0;
 
 bool pressed = false;
 unsigned long touchStart = 0;
+
+byte ledAmp = 0;
+byte ledShift = 0;
+int ledPeriod = 2000;
+unsigned long fadeStart = 0;
 
 void setup() {
 
@@ -64,6 +71,7 @@ void OFF() {
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
+  ledShift = 0; ledAmp = 0;
   Serial.println("Mode: off"); Serial.flush();
 }
 
@@ -72,6 +80,8 @@ void ACC() {
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
+  ledShift = 127; ledAmp = 128;
+  ledPeriod = 2000; fadeStart = millis();
   Serial.println("Mode: accessory"); Serial.flush();
 }
 
@@ -80,6 +90,7 @@ void ON() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
+  ledShift = 0; ledAmp = 255;
   Serial.println("Mode: ignition on"); Serial.flush();
 }
 
@@ -88,6 +99,8 @@ void ST() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, HIGH); // 7-8
+  ledShift = 127; ledAmp = 128;
+  ledPeriod = 250; fadeStart = millis();
   Serial.println("Mode: engine start"); Serial.flush();
 }
 
@@ -135,6 +148,8 @@ void loop() {
     mode = 3;
     ST();
   }
+
+  analogWrite(pinLed, ledShift + ledAmp * cos(2 * PI / ledPeriod * (millis() - fadeStart)));
 
   delay(50);
 
