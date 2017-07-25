@@ -121,7 +121,7 @@ void cycle() {
 
 void loop() {
 
-  uint16_t value = analogTouchRead(pinCap);
+  uint16_t value = analogTouchRead(pinCap, 100);
 
   // Self calibrate capacitive touch
   static uint16_t ref = 0xFFFF;
@@ -130,7 +130,7 @@ void loop() {
   else if (value > (ref >> offset))
     ref++;
 
-  bool touched = (value - (ref >> offset)) > 40;
+  bool touched = (value - (ref >> offset)) > 100;
 
   if (touched & !pressed) {
     touchStart = millis();
