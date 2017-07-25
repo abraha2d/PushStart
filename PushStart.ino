@@ -35,7 +35,7 @@ unsigned long touchStart = 0;
 
 byte ledAmp = 0;
 byte ledShift = 0;
-int ledPeriod = 2000;
+int ledPeriod = 0;
 unsigned long fadeStart = 0;
 
 void setup() {
@@ -81,7 +81,7 @@ void ACC() {
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
-  ledShift = 127; ledAmp = 128;
+  ledShift = 64; ledAmp = 64;
   ledPeriod = 2000; fadeStart = millis();
   Serial.println("Mode: accessory"); Serial.flush();
 }
@@ -92,7 +92,7 @@ void ON() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
-  ledShift = 0; ledAmp = 255;
+  ledShift = 32; ledAmp = 0;
   Serial.println("Mode: ignition on"); Serial.flush();
 }
 
@@ -102,8 +102,8 @@ void ST() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, HIGH); // 7-8
-  ledShift = 127; ledAmp = 128;
-  ledPeriod = 250; fadeStart = millis();
+  ledShift = 128; ledAmp = 127;
+  ledPeriod = 500; fadeStart = millis();
   Serial.println("Mode: engine start"); Serial.flush();
 }
 
@@ -149,7 +149,7 @@ void loop() {
     ST();
   }
 
-  analogWrite(pinLed, ledShift + ledAmp * cos(2 * PI / ledPeriod * (millis() - fadeStart)));
+  analogWrite(pinLed, ledShift + ledAmp * -cos(2 * PI / ledPeriod * (millis() - fadeStart)));
 
   delay(50);
 
