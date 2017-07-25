@@ -50,14 +50,13 @@ void setup() {
   pinMode(pinIG2, OUTPUT);
   pinMode(pinST2, OUTPUT);
 
-  Serial.begin(115200);
+  Serial.begin(57600);
 
   Serial.println();
-  Serial.println(" Push Start ");
-  Serial.println(" Version 2.0 ");
-  Serial.println();
-  Serial.println(" Designed by Kevin Abraham ");
-  Serial.println(" For 97-01 Toyota Camry (XV20) ");
+  Serial.println("            Push Start            ");
+  Serial.println("  Arduino-based Keyless Ignition  ");
+  Serial.println("  for 97-01 Toyota Camry (XV20)   ");
+  Serial.println("    Designed by Kevin Abraham     ");
   Serial.println();
 
   Serial.println("Mode: off");
