@@ -41,10 +41,10 @@ unsigned long fadeStart = 0;
 void setup() {
 
   // Bring relay pins low as soon as possible
-  digitalWrite(pinACC, LOW);
-  digitalWrite(pinIG1, LOW);
-  digitalWrite(pinIG2, LOW);
-  digitalWrite(pinST2, LOW);
+  digitalWrite(pinACC, HIGH);
+  digitalWrite(pinIG1, HIGH);
+  digitalWrite(pinIG2, HIGH);
+  digitalWrite(pinST2, HIGH);
   pinMode(pinACC, OUTPUT);
   pinMode(pinIG1, OUTPUT);
   pinMode(pinIG2, OUTPUT);
@@ -66,20 +66,20 @@ void setup() {
 
 void OFF() {
   mode = 0;
-  digitalWrite(pinACC, LOW);  // 2-3
-  digitalWrite(pinIG1, LOW);  // 2-4
-  digitalWrite(pinIG2, LOW);  // 7-6
-  digitalWrite(pinST2, LOW);  // 7-8
+  digitalWrite(pinACC, HIGH); // 2-3
+  digitalWrite(pinIG1, HIGH); // 2-4
+  digitalWrite(pinIG2, HIGH); // 7-6
+  digitalWrite(pinST2, HIGH); // 7-8
   ledShift = 0; ledAmp = 0;
   Serial.println("Mode: off"); Serial.flush();
 }
 
 void ACC() {
   mode = 1;
-  digitalWrite(pinACC, HIGH); // 2-3
-  digitalWrite(pinIG1, LOW);  // 2-4
-  digitalWrite(pinIG2, LOW);  // 7-6
-  digitalWrite(pinST2, LOW);  // 7-8
+  digitalWrite(pinACC, LOW);  // 2-3
+  digitalWrite(pinIG1, HIGH); // 2-4
+  digitalWrite(pinIG2, HIGH); // 7-6
+  digitalWrite(pinST2, HIGH); // 7-8
   ledShift = 64; ledAmp = 64;
   ledPeriod = 2000; fadeStart = millis();
   Serial.println("Mode: accessory"); Serial.flush();
@@ -87,20 +87,20 @@ void ACC() {
 
 void ON() {
   mode = 2;
-  digitalWrite(pinACC, HIGH); // 2-3
-  digitalWrite(pinIG1, HIGH); // 2-4
-  digitalWrite(pinIG2, HIGH); // 7-6
-  digitalWrite(pinST2, LOW);  // 7-8
+  digitalWrite(pinACC, LOW);  // 2-3
+  digitalWrite(pinIG1, LOW);  // 2-4
+  digitalWrite(pinIG2, LOW);  // 7-6
+  digitalWrite(pinST2, HIGH); // 7-8
   ledShift = 32; ledAmp = 0;
   Serial.println("Mode: ignition on"); Serial.flush();
 }
 
 void ST() {
   mode = 3;
-  digitalWrite(pinACC, LOW);  // 2-3
-  digitalWrite(pinIG1, HIGH); // 2-4
-  digitalWrite(pinIG2, HIGH); // 7-6
-  digitalWrite(pinST2, HIGH); // 7-8
+  digitalWrite(pinACC, HIGH); // 2-3
+  digitalWrite(pinIG1, LOW);  // 2-4
+  digitalWrite(pinIG2, LOW);  // 7-6
+  digitalWrite(pinST2, LOW);  // 7-8
   ledShift = 128; ledAmp = 127;
   ledPeriod = 500; fadeStart = millis();
   Serial.println("Mode: engine start"); Serial.flush();
