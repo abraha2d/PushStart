@@ -97,7 +97,7 @@ void ON() {
 
 void ST() {
   mode = 3;
-  digitalWrite(pinACC, HIGH); // 2-3
+  digitalWrite(pinACC, LOW); // 2-3
   digitalWrite(pinIG1, LOW);  // 2-4
   digitalWrite(pinIG2, LOW);  // 7-6
   digitalWrite(pinST2, LOW);  // 7-8
