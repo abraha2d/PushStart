@@ -70,7 +70,7 @@ void OFF() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, HIGH); // 7-8
-  ledShift = 0; ledAmp = 0;
+  ledShift = 48; ledAmp = 0;
   Serial.println("Mode: off"); Serial.flush();
 }
 
@@ -80,7 +80,7 @@ void ACC() {
   digitalWrite(pinIG1, HIGH); // 2-4
   digitalWrite(pinIG2, HIGH); // 7-6
   digitalWrite(pinST2, HIGH); // 7-8
-  ledShift = 64; ledAmp = 64;
+  ledShift = 96; ledAmp = 64;
   ledPeriod = 2000; fadeStart = millis();
   Serial.println("Mode: accessory"); Serial.flush();
 }
