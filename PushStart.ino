@@ -18,7 +18,7 @@
 #define pinIG2 7
 #define pinST2 8
 
-#define pinCap A4
+#define pinCap A5
 #define pinLed 10
 
 // Slow down the automatic calibration cooldown
@@ -59,8 +59,9 @@ void setup() {
   Serial.println("    Designed by Kevin Abraham     ");
   Serial.println();
 
-  Serial.println("Mode: off");
-  Serial.flush();
+//  Serial.println("Mode: off");
+//  Serial.flush();
+  ON();
 
 }
 
